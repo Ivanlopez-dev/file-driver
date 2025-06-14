@@ -17,7 +17,7 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { createAccount } from '@/lib/actions/user.actions'
+import { createAccount, signInUser } from '@/lib/actions/user.actions'
 import OTPModal from './OTPModal'
 
 type FormType = 'sign-in' | 'sign-up'
@@ -45,16 +45,19 @@ const AuthForm = ({ type }: { type: FormType }) => {
     }
   })
 
-  // 2.Define a Submit handler.
+  // 2. Submit handler.
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true)
     setErrorMessage('')
 
     try {
-      const user = await createAccount({
-        fullName: values.fullName || '',
-        email: values.email
-      })
+      const user =
+        type === 'sign-up'
+          ? await createAccount({
+              fullName: values.fullName || '',
+              email: values.email
+            })
+          : await signInUser({ email: values.email })
 
       setAccountId(user.accountId)
     } catch {
