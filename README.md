@@ -68,7 +68,7 @@ reusability
 
 Follow these steps to set up the project locally on your machine.
 
-**Prerequisites**
+### Prerequisites
 
 Make sure you have the following installed on your machine:
 
@@ -76,14 +76,14 @@ Make sure you have the following installed on your machine:
 - [**Node.js**](https://nodejs.org/en)
 - [**npm**](https://www.npmjs.com/) (Node Package Manager)
 
-**Cloning the Repository**
+### Cloning the Repository
 
 ```bash
 git clone https://github.com/Ivanlopez-dev/file-driver.git
 cd file-driver
 ```
 
-**Installation**
+### Installation
 
 Install the project dependencies using npm:
 
@@ -91,7 +91,7 @@ Install the project dependencies using npm:
 npm install
 ```
 
-**Set Up Environment Variables**
+### Set Up Environment Variables
 
 Create a new file named `.env.local` in the root of your project and add the following content:
 
@@ -108,7 +108,7 @@ NEXT_APPWRITE_KEY=""
 Replace the values with your actual Appwrite credentials. You can obtain these credentials by signing up &
 creating a new project on the [**Appwrite website**](https://appwrite.io/).
 
-**Running the Project**
+### Running the Project
 
 ```bash
 npm run dev
