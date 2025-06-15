@@ -6,6 +6,9 @@ import Sidebar from '@/components/Sidebar'
 import MobileNavigation from '@/components/MobileNavigation'
 import { Toaster } from '@/components/ui/toaster'
 
+// Force-dynamic configuration -> to ensure that the route is dynamically rendered at request time rather than being statically generated.
+export const dynamic = 'force-dynamic'
+
 const Layout = async ({ children }: { children: React.ReactNode }) => {
   const currentUser = await getCurrentUser()
   if (!currentUser) return redirect('/sign-in')
