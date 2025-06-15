@@ -3,11 +3,14 @@ import { Models } from 'node-appwrite'
 import { getFiles } from '@/lib/actions/file.actions'
 import Sort from '@/components/Sort'
 import Card from '@/components/Card'
+import { getFileTypesParams } from '@/lib/utils'
 
 const Page = async ({ params }: SearchParamProps) => {
   const type = ((await params)?.type as string) || ''
 
-  const files = await getFiles()
+  const types = getFileTypesParams(type) as FileType[]
+
+  const files = await getFiles({ types })
 
   return (
     <div className='page-container'>
