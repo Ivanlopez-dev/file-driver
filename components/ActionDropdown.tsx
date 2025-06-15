@@ -7,10 +7,10 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { actionsDropdownItems } from '@/constants'
 import { constructDownloadUrl } from '@/lib/utils'
-import { renameFile } from '@/lib/actions/file.actions'
+import { renameFile, updateFileUsers } from '@/lib/actions/file.actions'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
-import { FileDetails } from './ActionsModalContent'
+import { FileDetails, ShareInput } from './ActionsModalContent'
 
 import {
   DropdownMenu,
@@ -35,6 +35,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [action, setAction] = useState<ActionType | null>(null)
   const [name, setName] = useState(file.name)
   const [isLoading, setIsLoading] = useState(false)
+  const [emails, setEmails] = useState<string[]>([])
 
   const path = usePathname()
 
@@ -54,7 +55,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     const actions = {
       rename: () =>
         renameFile({ fileId: file.$id, name, extension: file.extension, path }),
-      share: () => console.log('share'),
+      share: () => updateFileUsers({ fileId: file.$id, emails, path }),
       delete: () => console.log('delete')
     }
 
@@ -63,6 +64,19 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
     if (success) closeAllModals()
 
     setIsLoading(false)
+  }
+
+  const handleRemoveUser = async (email: string) => {
+    const updatedEmails = emails.filter(e => e !== email)
+
+    const success = await updateFileUsers({
+      fileId: file.$id,
+      emails: updatedEmails,
+      path
+    })
+
+    if (success) setEmails(updatedEmails)
+    closeAllModals()
   }
 
   const renderDialogContent = () => {
@@ -85,7 +99,14 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
             />
           )}
 
-          {value && 'details' && <FileDetails file={file} />}
+          {value === 'details' && <FileDetails file={file} />}
+          {value === 'share' && (
+            <ShareInput
+              file={file}
+              onInputChange={setEmails}
+              onRemove={handleRemoveUser}
+            />
+          )}
         </DialogHeader>
 
         {['rename', 'delete', 'share'].includes(value) && (
