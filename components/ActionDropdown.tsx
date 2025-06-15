@@ -4,10 +4,13 @@ import React, { useState } from 'react'
 import { Models } from 'node-appwrite'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { actionsDropdownItems } from '@/constants'
 import { constructDownloadUrl } from '@/lib/utils'
+import { renameFile } from '@/lib/actions/file.actions'
 import { Input } from './ui/input'
 import { Button } from './ui/button'
+import { FileDetails } from './ActionsModalContent'
 
 import {
   DropdownMenu,
@@ -25,8 +28,6 @@ import {
   DialogHeader,
   DialogTitle
 } from '@/components/ui/dialog'
-import { renameFile } from '@/lib/actions/file.actions'
-import { usePathname } from 'next/navigation'
 
 const ActionDropdown = ({ file }: { file: Models.Document }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
@@ -75,6 +76,7 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
           <DialogTitle className='text-center text-light-100'>
             {label}
           </DialogTitle>
+
           {value === 'rename' && (
             <Input
               type='text'
@@ -82,6 +84,8 @@ const ActionDropdown = ({ file }: { file: Models.Document }) => {
               onChange={e => setName(e.target.value)}
             />
           )}
+
+          {value && 'details' && <FileDetails file={file} />}
         </DialogHeader>
 
         {['rename', 'delete', 'share'].includes(value) && (
